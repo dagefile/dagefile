@@ -1,7 +1,7 @@
 {
   "policies": {
-    "AppUpdateURL": "",
     "AppAutoUpdate": false,
+    "AppUpdateURL": "",
     "AutofillAddressEnabled": false,
     "AutofillCreditCardEnabled": false,
     "BackgroundAppUpdate": false,
@@ -15,7 +15,6 @@
     "DisableFirefoxScreenshots": true,
     "DisablePasswordReveal": true,
     "DisablePocket": true,
-    "DisablePrivateBrowsing": true,
     "DisableProfileImport": true,
     "DisableSetDesktopBackground": true,
     "DisableSystemAddonUpdate": true,
@@ -24,15 +23,15 @@
     "DisplayMenuBar": "never",
     "DontCheckDefaultBrowser": true,
     "EnableTrackingProtection": {
-      "Value": false,
-      "Locked": false,
+      "Value": true,
+      "Locked": true,
       "Cryptomining": true,
       "Fingerprinting": true,
       "Exceptions": ["https://example.com"]
     },
     "EncryptedMediaExtensions": {
       "Enabled": false,
-      "Locked": false
+      "Locked": true
     },
     "ExtensionUpdate": false,
     "FirefoxHome": {
@@ -53,10 +52,9 @@
     },
     "Homepage": {
       "URL": "http://example.com/",
-      "Locked": false,
-      "Additional": ["http://example.org/",
-                     "http://example.edu/"],
-      "StartPage": "none"
+      "Locked": true,
+      "Additional": ["http://example.org/", "http://example.edu/"],
+      "StartPage": "homepage"
     },
     "OfferToSaveLogins": false,
     "OfferToSaveLoginsDefault": false,
@@ -65,8 +63,7 @@
       "Locked": true
     },
     "PopupBlocking": {
-      "Allow": ["http://example.org/",
-                "http://example.edu/"],
+      "Allow": ["http://example.org/", "http://example.edu/"],
       "Default": true,
       "Locked": true
     },
@@ -81,12 +78,11 @@
     "UserMessaging": {
       "ExtensionRecommendations": false,
       "FeatureRecommendations": false,
-      "UrlbarInterventions": false,  
-      "SkipOnboarding": false,
+      "UrlbarInterventions": false,
+      "SkipOnboarding": true,
       "MoreFromMozilla": false,
       "FirefoxLabs": false,
       "Locked": true
     }
-
   }
 }
