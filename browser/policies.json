@@ -1,0 +1,92 @@
+{
+  "policies": {
+    "AppUpdateURL": "",
+    "AppAutoUpdate": false,
+    "AutofillAddressEnabled": false,
+    "AutofillCreditCardEnabled": false,
+    "BackgroundAppUpdate": false,
+    "DownloadDirectory": "/workspaces/download",
+    "DisableAppUpdate": true,
+    "DisableDeveloperTools": true,
+    "DisableMasterPasswordCreation": true,
+    "DisableFeedbackCommands": true,
+    "DisableFirefoxAccounts": true,
+    "DisableFirefoxStudies": true,
+    "DisableFirefoxScreenshots": true,
+    "DisablePasswordReveal": true,
+    "DisablePocket": true,
+    "DisablePrivateBrowsing": true,
+    "DisableProfileImport": true,
+    "DisableSetDesktopBackground": true,
+    "DisableSystemAddonUpdate": true,
+    "DisableTelemetry": true,
+    "DisplayBookmarksToolbar": "never",
+    "DisplayMenuBar": "never",
+    "DontCheckDefaultBrowser": true,
+    "EnableTrackingProtection": {
+      "Value": false,
+      "Locked": false,
+      "Cryptomining": true,
+      "Fingerprinting": true,
+      "Exceptions": ["https://example.com"]
+    },
+    "EncryptedMediaExtensions": {
+      "Enabled": false,
+      "Locked": false
+    },
+    "ExtensionUpdate": false,
+    "FirefoxHome": {
+      "Search": false,
+      "TopSites": true,
+      "SponsoredTopSites": false,
+      "Highlights": false,
+      "Pocket": false,
+      "SponsoredPocket": false,
+      "Snippets": false,
+      "Locked": true
+    },
+    "FirefoxSuggest": {
+      "WebSuggestions": false,
+      "SponsoredSuggestions": false,
+      "ImproveSuggest": false,
+      "Locked": true
+    },
+    "Homepage": {
+      "URL": "http://example.com/",
+      "Locked": false,
+      "Additional": ["http://example.org/",
+                     "http://example.edu/"],
+      "StartPage": "none"
+    },
+    "OfferToSaveLogins": false,
+    "OfferToSaveLoginsDefault": false,
+    "PictureInPicture": {
+      "Enabled": false,
+      "Locked": true
+    },
+    "PopupBlocking": {
+      "Allow": ["http://example.org/",
+                "http://example.edu/"],
+      "Default": true,
+      "Locked": true
+    },
+    "PrintingEnabled": false,
+    "PrivateBrowsingModeAvailability": 1,
+    "SupportMenu": {
+      "Title": "Support Menu",
+      "URL": "http://example.com/support",
+      "AccessKey": "S"
+    },
+    "TranslateEnabled": true,
+    "UserMessaging": {
+      "ExtensionRecommendations": false,
+      "FeatureRecommendations": false,
+      "UrlbarInterventions": false,  
+      "SkipOnboarding": false,
+      "MoreFromMozilla": false,
+      "FirefoxLabs": false,
+      "Locked": true
+    }
+
+  }
+}
