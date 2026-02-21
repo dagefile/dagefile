@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source ~/.bashrc
+export PATH=$PATH:/workspaces/runCommand
+
+clear
+echo "--- Private Launcher ---"
+read -e -p " > " cmd
+
+if [ -n "$cmd" ]; then
+    # nohup $cmd >/dev/null 2>&1 &
+    # i3-msg exec "$cmd" 
+    setsid $cmd >/dev/null 2>&1 &
+ 
+    sleep 0.1
+fi
