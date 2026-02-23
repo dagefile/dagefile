@@ -1,0 +1,19 @@
+#!/bin/bash
+
+MARK=$1
+
+# 1. Check if ANY window has this mark anywhere in the tree
+# We get the window ID (con_id) for that mark
+WIN_ID=$(i3-msg -t get_tree | jq -r ".. | objects | select(.marks? | contains([\"$MARK\"]))? | .id")
+
+# DEBUG (Optional: uncomment to see what's happening in a terminal)
+# echo "Mark: $MARK | ID: $WIN_ID"
+
+if [ -z "$WIN_ID" ] || [ "$WIN_ID" == "null" ]; then
+    # CASE: Mark doesn't exist. Assign it to the current window and hide it.
+    i3-msg "mark $MARK, move scratchpad"
+else
+    # CASE: Mark exists. Toggle its visibility.
+    # 'scratchpad show' is a toggle by nature if the window is already focused.
+    i3-msg "[con_mark=\"$MARK\"] scratchpad show"
+fi
