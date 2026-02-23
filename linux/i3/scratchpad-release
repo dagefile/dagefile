@@ -1,0 +1,5 @@
+#!/bin/bash
+# 1. Remove all marks (or a specific one if you prefer)
+i3-msg "unmark"
+# 2. Turn off floating to snap it back into the tiles
+i3-msg "floating disable"
