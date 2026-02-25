@@ -1,0 +1,51 @@
+# Ignore heavy media plugins (Firefox re-downloads these)
+gmp-gmpopenh264/
+gmp-widevinecdm/
+
+bookmarkbackups/
+cache2/
+datareporting/
+startupCache/
+sessionstore-backups/
+extension*
+times.json
+webapps*
+xulstore.json
+lock
+.parentlock
+addon*
+safebrowsing/
+thumbnails/
+AlternateServices.bin
+broadcast-listeners.json
+favicons*
+formhistory.sqlite
+**/caches.sqlite
+# gemini generated 1. Telemetry & Crash Reports (High churn, zero value for backup)
+pending/
+minidumps/
+saved-telemetry-pings/
+telemetry/
+Shaders/
+# chatgpt generated 1. Additional Telemetry & Crash Reports
+user-
+datareporting/
+crashes/
+# gemini generated 2. Database Write-Ahead Logs (WAL)
+# These are temporary files created while Firefox is running. 
+# If you back them up, they might cause corruption when restoring.
+*.sqlite-wal
+*.sqlite-shm
+# gemini generated 3. Security & Site Specifics (Optional but recommended)
+# These store site-specific permissions and security certs 
+# which can get bloated or cause issues on different machines.
+content-prefs.sqlite
+permissions.sqlite
+pkcs11.txt
+SiteSecurityServiceState.txt
+
+# gemini generated 4. Storage 
+# This folder can get MASSIVE (megabytes of indexedDB data from websites).
+# Your current rule catches 'cache', but not the actual site data.
+storage/default/*/cache/
+storage/to-be-removed/
