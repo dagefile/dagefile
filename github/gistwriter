@@ -1,0 +1,105 @@
+#!/bin/bash
+
+### ───────────────────────────────────────────────────────────────
+###  Setup
+### ───────────────────────────────────────────────────────────────
+
+GIST_DIR="gist"
+INTERVAL=300  # 5 minutes
+
+mkdir -p "$GIST_DIR"
+
+echo "🟢 Keep-alive service started. Logging every 5 minutes."
+
+
+### ───────────────────────────────────────────────────────────────
+###  Fetch gist discover page HTML
+### ───────────────────────────────────────────────────────────────
+fetch_gist_page() {
+  echo "🕒 $(date '+%Y-%m-%d %H:%M:%S') 🌐 Fetching Gist Discover page..."
+  curl -s https://gist.github.com/discover
+}
+
+
+### ───────────────────────────────────────────────────────────────
+###  Process gist list + save file
+### ───────────────────────────────────────────────────────────────
+process_gists() {
+  local html="$1"
+  local gist_urls
+  gist_urls=$(echo "$html" | grep -oE '/[a-zA-Z0-9_-]+/[a-f0-9]{32}')
+
+  if [[ -z "$gist_urls" ]]; then
+    echo "❌ No Gist URLs found."
+    return
+  fi
+
+  # Auth header
+  if [[ -n "$GITHUB_TOKEN" ]]; then
+    auth_header="-H Authorization: token $GITHUB_TOKEN"
+    echo "🔑 Auth enabled."
+  else
+    auth_header=""
+    echo "⚠️ Unauthenticated mode — 60 req/h."
+  fi
+
+  for gist_url in $gist_urls; do
+    local full_url="https://gist.github.com$gist_url"
+    local gist_id
+    gist_id=$(basename "$gist_url")
+
+    echo "🔍 Checking Gist: $full_url"
+
+    local response
+    response=$(curl -s $auth_header "https://api.github.com/gists/$gist_id")
+
+    if echo "$response" | jq -e '.files' >/dev/null 2>&1; then
+      local filename raw_url
+      filename=$(echo "$response" | jq -r '.files | to_entries[0].value.filename')
+      raw_url=$(echo "$response" | jq -r '.files | to_entries[0].value.raw_url')
+
+      if [[ "$filename" != "null" && "$raw_url" != "null" ]]; then
+        echo "📁 Saving: $filename"
+        
+        # Clean gist dir
+        rm -rf "$GIST_DIR"/* "$GIST_DIR"/.[!.]* "$GIST_DIR"/..?*
+        
+        # Download file
+        curl -s "$raw_url" -o "$GIST_DIR/$filename"
+        echo "✅ Saved to $GIST_DIR/$filename"
+        return
+      fi
+    else
+      local error
+      error=$(echo "$response" | jq -r '.message // empty')
+      echo "⚠️ Skip ($gist_id): ${error:-No files}"
+    fi
+  done
+
+  echo "❌ No valid gist found."
+}
+
+
+### ───────────────────────────────────────────────────────────────
+###  Keep-alive log
+### ───────────────────────────────────────────────────────────────
+keep_alive_log() {
+  local rand_str
+  rand_str=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 8)
+  echo "$(date) - Keep-alive ping - $rand_str" >> "$GIST_DIR/test1.log"
+}
+
+
+### ───────────────────────────────────────────────────────────────
+###  Main loop
+### ───────────────────────────────────────────────────────────────
+main_loop() {
+  while true; do
+    html=$(fetch_gist_page)
+    process_gists "$html"
+    #keep_alive_log
+    sleep "$INTERVAL"
+  done
+}
+
+main_loop
