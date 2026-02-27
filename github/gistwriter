@@ -4,7 +4,7 @@
 ###  Setup
 ### ───────────────────────────────────────────────────────────────
 
-GIST_DIR="gist"
+GIST_DIR="tempgist"
 INTERVAL=300  # 5 minutes
 
 mkdir -p "$GIST_DIR"
