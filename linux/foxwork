@@ -1,0 +1,38 @@
+#!/bin/bash
+
+binpath=/workspaces/software/firefox/firefox
+profilepath="/workspaces/udff/$1"
+
+if [ ! -d "$profilepath" ]; then
+    echo "Error: Profile path '$profilepath' does not exist."
+    exit 1
+fi
+
+if [ "$1" = "temp" ]; then
+    echo "Cleaning and launching temporary profile..."
+    rm -fr "$profilepath"/*
+    $binpath --profile "$profilepath" &
+    exit 0
+fi
+
+gitFolder="$profilepath/.git"
+if [ ! -d "$gitFolder" ]; then
+    echo "Profile not version controlled. Launching without sync..."
+    $binpath --profile "$profilepath" &
+    exit 0
+fi
+
+cd "$profilepath" || exit
+git pull
+
+$binpath --profile "$profilepath"
+
+if [ ! -f "$profilepath/.gitignore" ]; then
+    echo "Warning: .gitignore not found. Skipping git push to prevent syncing unwanted files."
+    exit 0
+fi
+
+current_date=$(date +"%Y-%m-%d %H:%M:%S")
+git add .
+git commit -m "foxwork auto sync - $current_date"
+git push
