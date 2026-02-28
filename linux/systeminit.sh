@@ -25,29 +25,44 @@ setup_bash_environment() {
 
     # Create .bashrc wrapper
     cat <<EOF > "$File_bashrc"
-export PATH=\$PATH:/workspaces/runCommand/
-cd /workspaces
-EOF
-    chmod +x "$File_bashrc"
+#!/bin/bash
 
-    # Create foxwork script
-    cat <<'EOF' > "$File_foxwork"
-#!/bin/sh
-
-if [ -z "$1" ]; then
-    echo "need profile name"
-    exit
-fi
-
-profilepath=/workspaces/udff/$1
 binpath=/workspaces/software/firefox/firefox
+profilepath="/workspaces/udff/$1"
+
+if [ ! -d "$profilepath" ]; then
+    echo "Error: Profile path '$profilepath' does not exist."
+    exit 1
+fi
 
 if [ "$1" = "temp" ]; then
-    rm -fr "/workspaces/udff/temp/"*
-    profilepath=/workspaces/udff/temp
+    echo "Cleaning and launching temporary profile..."
+    rm -fr "$profilepath"/*
+    $binpath --profile "$profilepath" &
+    exit 0
 fi
 
-$binpath --profile $profilepath &
+gitFolder="$profilepath/.git"
+if [ ! -d "$gitFolder" ]; then
+    echo "Profile not version controlled. Launching without sync..."
+    $binpath --profile "$profilepath" &
+    exit 0
+fi
+
+cd "$profilepath" || exit
+git pull
+
+$binpath --profile "$profilepath"
+
+if [ ! -f "$profilepath/.gitignore" ]; then
+    echo "Warning: .gitignore not found. Skipping git push to prevent syncing unwanted files."
+    exit 0
+fi
+
+current_date=$(date +"%Y-%m-%d %H:%M:%S")
+git add .
+git commit -m "foxwork auto sync - $current_date"
+git push
 EOF
     chmod +x "$File_foxwork"
 
