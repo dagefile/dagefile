@@ -23,8 +23,15 @@ setup_bash_environment() {
     # Ensure .bashrc sources our script
     grep -qxF "$LINE" "$FILE" || printf '\n%s\n' "$LINE" >> "$FILE"
 
-    # Create .bashrc wrapper
     cat <<EOF > "$File_bashrc"
+export PATH=\$PATH:/workspaces/runCommand/
+cd /workspaces
+EOF
+
+    chmod +x "$File_bashrc"
+    
+    # Create foxwork script
+    cat <<'EOF' > "$File_foxwork"
 #!/bin/bash
 
 binpath=/workspaces/software/firefox/firefox
