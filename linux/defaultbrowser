@@ -1,0 +1,12 @@
+#!/bin/bash
+
+profilename=public1
+
+binpath=/workspaces/software/firefox/firefox
+profilepath="/workspaces/udff/$profilename"
+
+
+$binpath --profile "$profilepath" $1
+
+# sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /workspaces/runCommand/defaultbrowser 200
+# sudo update-alternatives --set x-www-browser /workspaces/runCommand/defaultbrowser
