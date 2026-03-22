@@ -137,7 +137,8 @@ check_firefox_version() {
     Installed_ESR_NUM=${Installed_ESR//esr/}
     Latest_ESR_NUM=${Latest_ESR//esr/}
 
-    Firefox_url="https://download.mozilla.org/?product=firefox-${Latest_ESR}-SSL&os=linux64&lang=en-US"
+    # Firefox_url="https://download.mozilla.org/?product=firefox-${Latest_ESR}-SSL&os=linux64&lang=en-US"
+    Firefox_url="https://archive.mozilla.org/pub/firefox/releases/115.33.0esr/linux-x86_64/en-US/firefox-115.33.0esr.tar.bz2"
 
     if [ "$Installed_ESR_NUM" = "$Latest_ESR_NUM" ]; then
         echo "Firefox is up-to-date, skipping download."
