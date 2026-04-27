@@ -48,4 +48,5 @@ SiteSecurityServiceState.txt
 # This folder can get MASSIVE (megabytes of indexedDB data from websites).
 # Your current rule catches 'cache', but not the actual site data.
 storage/default/*/cache/
+storage/permanent/chrome/idb/*.files
 storage/to-be-removed/
