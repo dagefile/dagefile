@@ -79,77 +79,33 @@ EOF
 
 
 # -------------------- Firefox Version JSON --------------------
-FF_VERSION_JSON=$(curl -s https://product-details.mozilla.org/1.0/firefox_versions.json)
-
-# -------------------- Function: Download & Install Firefox --------------------
-download_firefox() {
-    local Firefox_url="$1"
-    local FFTmp_extract="$Software_path/firefox_tmp_$$"
-    local FFDownload_file="/tmp/firefox.download"
-
-    rm -f "$FFDownload_file"
-    rm -rf "$FFTmp_extract"
-    mkdir -p "$FFTmp_extract"
-
-    trap 'rm -rf "$FFTmp_extract" "$FFDownload_file"' EXIT
-
-    echo "Downloading Firefox ESR..."
-    if ! curl -L -o "$FFDownload_file" "$Firefox_url"; then
-        echo "Error: Download failed!"
-        exit 1
-    fi
-
-    echo "Extracting Firefox..."
-    if ! tar -xf "$FFDownload_file" -C "$FFTmp_extract"; then
-        echo "Error: Extraction failed!"
-        exit 1
-    fi
-
-    local Extracted_folder
-    Extracted_folder=$(find "$FFTmp_extract" -mindepth 1 -maxdepth 1 -type d | head -n 1)
-    if [ -z "$Extracted_folder" ]; then
-        echo "Error: Could not find extracted Firefox folder!"
-        exit 1
-    fi
-
-    rm -rf "$FFFinal_folder"
-    mv "$Extracted_folder" "$FFFinal_folder"
-    chmod +x "$FFBin_path"
-    echo "Firefox is ready at $FFBin_path"
-}
-
-# -------------------- Function: Check Firefox Version --------------------
-check_firefox_version() {
-    local Installed_ESR=""
-    local Latest_ESR
-    local Installed_ESR_NUM
-    local Latest_ESR_NUM
-    local Firefox_url
-
-    if [ -x "$FFBin_path" ]; then
-        Installed_ESR=$("$FFBin_path" --version | awk '{print $3}')
-        echo "Installed Firefox version: $Installed_ESR"
-    fi
-
-    Latest_ESR=$(echo "$FF_VERSION_JSON" | grep '"FIREFOX_ESR"' | sed -E 's/.*: *"([^"]+)".*/\1/')
-    echo "Latest Firefox ESR: $Latest_ESR"
-
-    Installed_ESR_NUM=${Installed_ESR//esr/}
-    Latest_ESR_NUM=${Latest_ESR//esr/}
-
-    # Firefox_url="https://download.mozilla.org/?product=firefox-${Latest_ESR}-SSL&os=linux64&lang=en-US"
-    Firefox_url="https://archive.mozilla.org/pub/firefox/releases/115.33.0esr/linux-x86_64/en-US/firefox-115.33.0esr.tar.bz2"
-
-    if [ "$Installed_ESR_NUM" = "$Latest_ESR_NUM" ]; then
-        echo "Firefox is up-to-date, skipping download."
+install_firefox() {
+{
+DEST="$FFFinal_folder"
+if [ ! -x "$DEST/firefox" ]; then
+    cd /workspaces/devspaces
+    mkdir -p firefox
+    cd firefox
+    curl -fLO https://raw.githubusercontent.com/daosparty/app-firefox-115/refs/heads/master/ff1
+    curl -fLO https://raw.githubusercontent.com/daosparty/app-firefox-115/refs/heads/master/ff2
+    cat ff1 ff2 > firefox.tar.bz2
+    
+    rm -rf "$DEST" || true
+    mkdir -p "$DEST"
+    tar -xjf "firefox.tar.bz2" -C "$DEST" --strip-components=1
+    
+    if [ -x "$DEST/firefox" ]; then
+        echo "✔ Firefox binary found and executable"
     else
-        echo "Firefox is outdated or missing. Downloading..."
-        download_firefox "$Firefox_url"
+        echo "✘ Error: firefox binary not found in $DEST"
     fi
+    rm -fr firefox 
+fi
+} || echo "firefox install error"
 }
 
 # -------------------- Main --------------------
 
 setup_bash_environment
-check_firefox_version
+install_firefox
 
