@@ -28,7 +28,6 @@ package_list="
     x11-utils \
     x11-xserver-utils \
     xdg-utils \
-    fbautostart \
     at-spi2-core \
     xterm \
     nautilus\
