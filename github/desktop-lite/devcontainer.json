@@ -6,5 +6,5 @@
         "./local-features/da-desktop": {}
     },
 
-    "forwardPorts": [5901, 6080]
+    "forwardPorts": [6080]
 }
