@@ -147,6 +147,34 @@ fi
 
 mkdir -p /var/run/dbus /usr/local/etc/vscode-dev-containers/
 
+
+# Container ENTRYPOINT script
+cat << 'EOF' > /usr/local/share/dagithubinit.sh
+#!/bin/bash
+
+DAINIT_DIR="/workspaces/.dainit"
+DAINIT_SCRIPT="$DAINIT_DIR/autostart.sh"
+
+mkdir -p "$DAINIT_DIR"
+
+if [ ! -f "$DAINIT_SCRIPT" ]; then
+cat << 'INNER_EOF' > "$DAINIT_SCRIPT"
+#!/bin/bash
+
+LOG_FILE="/tmp/dagithub-autostart.log"
+
+while true; do
+    echo "[$(date)] autostart running" > "$LOG_FILE"
+    sleep 10
+done
+INNER_EOF
+
+chmod +x "$DAINIT_SCRIPT"
+fi
+
+bash "$DAINIT_SCRIPT"
+EOF
+
 # Resolution changer script
 cat << EOF > /usr/local/bin/set-resolution
 #!/bin/bash
@@ -199,6 +227,13 @@ if [ -d "/usr/local/novnc" ]; then
     if [ "\$(ps -ef | grep novnc_proxy | grep -v grep)" = "" ]; then
         (/usr/local/novnc/noVNC*/utils/novnc_proxy --listen ${NOVNC_PORT} --vnc localhost:${VNC_PORT} &)
     fi
+fi
+
+
+# Run custom startup script in background
+if [ -f "/usr/local/share/dagithubinit.sh" ]; then
+    keepRunningInBackground "dagithubinit" sudoUserIf "/usr/local/share/dagithubinit.sh"
+    log "dagithubinit started."
 fi
 
 if [ -n "\$1" ]; then exec "\$@"; fi
