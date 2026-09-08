@@ -200,12 +200,22 @@ check_packages ${package_list}
 
 # if Ubuntu-24.04, noble(numbat) / Debian-13, trixie found, then will install libasound2-dev instead of libasound2.
 # this change is temporary, https://packages.ubuntu.com/noble/libasound2 will switch to libasound2 once it is available for Ubuntu-24.04, noble(numbat)
-. /etc/os-release
-if { [ "${ID}" = "ubuntu" ] && [ "${VERSION_CODENAME}" = "noble" ]; } || { [ "${ID}" = "debian" ] && [ "${VERSION_CODENAME}" = "trixie" ]; }; then
-    echo "Detected Noble (Ubuntu 24.04) or Trixie (Debian). Installing libasound2-dev package..."
-    check_packages "libasound2-dev"
+# modified 2026.0909
+# . /etc/os-release
+# if { [ "${ID}" = "ubuntu" ] && [ "${VERSION_CODENAME}" = "noble" ]; } || { [ "${ID}" = "debian" ] && [ "${VERSION_CODENAME}" = "trixie" ]; }; then
+#     echo "Detected Noble (Ubuntu 24.04) or Trixie (Debian). Installing libasound2-dev package..."
+#     check_packages "libasound2-dev"
+# else
+#     check_packages "libasound2"
+# fi
+if apt-cache show libasound2t64 > /dev/null 2>&1; then
+    echo "Detected libasound2t64. Installing ALSA libraries..."
+    check_packages libasound2t64 libasound2-dev
+elif apt-cache show libasound2 > /dev/null 2>&1; then
+    echo "Detected libasound2. Installing ALSA libraries..."
+    check_packages libasound2 libasound2-dev
 else
-    check_packages "libasound2"
+    echo "WARNING: No supported ALSA package found."
 fi
 
 # On newer versions of Ubuntu (22.04), 
