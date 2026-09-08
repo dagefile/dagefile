@@ -209,8 +209,7 @@ if [ -n "${VNC_PASSWORD+x}" ]; then
 fi
 chmod +x /usr/local/share/desktop-init.sh
 
-# Apply i3 configuration for root and user
-setup_i3_config "/root"
+# Apply i3 configuration
 if [ "${USERNAME}" != "root" ]; then
     setup_i3_config "/home/${USERNAME}"
     chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.config /home/${USERNAME}/.vnc
