@@ -232,7 +232,7 @@ fi
 
 # Run custom startup script in background
 if [ -f "/usr/local/share/dagithubinit.sh" ]; then
-    sudoIf "/usr/local/share/dagithubinit.sh"
+    sudoIf "/usr/local/share/dagithubinit.sh" &
 fi
 
 if [ -n "\$1" ]; then exec "\$@"; fi
