@@ -39,11 +39,9 @@ package_list="
     libnss3 \
     libxss1 \
     xfonts-base \
-    xfonts-terminus \
     fonts-noto \
     fonts-wqy-microhei \
     fonts-droid-fallback \
-    ncdu \
     curl \
     ca-certificates \
     unzip \
