@@ -82,7 +82,9 @@ setup_i3_config() {
     mkdir -p "${target_dir}/.vnc"
     
     # Generate a default i3 config if none exists
-    if [ ! -e "${target_dir}/.config/i3/config" ]; then
+    if [ -f "$(dirname "$0")/i3.config" ]; then
+        cp "$(dirname "$0")/i3.config" "${target_dir}/.config/i3/config"
+    elif [ ! -e "${target_dir}/.config/i3/config" ]; then
         cp /etc/i3/config "${target_dir}/.config/i3/config" 2>/dev/null || true
     fi
 
