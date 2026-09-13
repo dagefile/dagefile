@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export PATH="$PATH:/workspaces/runCommand"
+
+clear
+echo "$(date '+%Y-%m-%d %H:%M:%S')"
+
+read -e -p " > " cmd
+
+if [ -n "$cmd" ]; then
+    setsid bash -c "$cmd" >/dev/null 2>&1 &
+fi
