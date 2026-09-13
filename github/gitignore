@@ -43,10 +43,13 @@ content-prefs.sqlite
 permissions.sqlite
 pkcs11.txt
 SiteSecurityServiceState.txt
+suggest.*
+quicksuggest-*
 
 # gemini generated 4. Storage 
 # This folder can get MASSIVE (megabytes of indexedDB data from websites).
 # Your current rule catches 'cache', but not the actual site data.
 storage/default/*/cache/
-storage/permanent/chrome/idb/*.files
+storage/permanent/chrome/idb
+storage/default/*/idb
 storage/to-be-removed/
