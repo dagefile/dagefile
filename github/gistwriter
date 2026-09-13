@@ -4,10 +4,15 @@
 ###  Setup
 ### ───────────────────────────────────────────────────────────────
 
-GIST_DIR="tempgist"
+GIST_DIR="/workspaces/$RepositoryName/tempgist"
 INTERVAL=300  # 5 minutes
 
 mkdir -p "$GIST_DIR"
+
+if [ ! -d "$GIST_DIR" ]; then
+    GIST_DIR="/workspaces/devspaces/tempgist"
+    mkdir -p "$GIST_DIR"
+fi
 
 echo "🟢 Keep-alive service started. Logging every 5 minutes."
 
