@@ -20,6 +20,7 @@ package_list="
     tigervnc-standalone-server \
     tigervnc-common \
     i3 \
+    alacritty \
     dbus-x11 \
     x11-utils \
     x11-xserver-utils \
