@@ -175,6 +175,7 @@ fi
 
 bash "$DAINIT_SCRIPT"
 EOF
+chmod +x /usr/local/share/dagithubinit.sh
 
 # Resolution changer script
 cat << EOF > /usr/local/bin/set-resolution
