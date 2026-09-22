@@ -1,0 +1,121 @@
+# AI-Assisted Software Project Collaboration Workflow
+
+## PURPOSE
+Controlled zero-cost collaboration between:
+- Human Project Owner (vision, decisions, testing, Git)
+- Architect AI (ChatGPT / Gemini / Grok) — task design + plan review
+- Developer Agent (Opencode or equivalent) — plan creation + code execution
+
+Goals:
+- Correct software
+- Architecture protection
+- Prevent scope creep
+- Clean project memory
+- Minimal context pollution for free-tier models
+
+## ROLES
+
+### 1. Project Owner (Human)
+- Defines goals and scope
+- Makes final decisions
+- Runs all tests
+- Handles all Git operations
+- Reviews final results
+
+### 2. Architect AI
+- Understands architecture
+- Creates task.md
+- Reviews plan.md
+- Writes fix.md when needed
+- Prevents complexity and scope expansion
+- Does not write production code unless explicitly ordered
+
+### 3. Developer Agent
+- Reads all project documents
+- Inspects code
+- Creates and revises plan.md
+- Implements only approved plans
+- Never makes major architecture decisions
+- Never touches Git
+
+## PROJECT DOCUMENTS
+
+### Permanent
+- `AGENTS.md` — AI working rules (rare changes)
+- `docs/ARCHITECTURE.md` — current design, modules, dependencies (update only when architecture actually changes)
+- `docs/LOG.md` — append-only history
+
+### Temporary (per task)
+- `docs/task.md` — immutable problem definition (locked after creation)
+- `docs/plan.md` — living implementation plan (overwritten every round)
+- `docs/fix.md` — latest correction note from Architect (created from Round 2; overwritten each failed review)
+
+## DEVELOPMENT CYCLE
+
+### Phase 1: Planning (Round 1)
+1. Architect creates `docs/task.md` containing:
+   - Problem
+   - Goal
+   - Constraints
+   - Target files / areas
+   - Success criteria
+2. `task.md` is now locked and immutable.
+3. Developer Agent reads `task.md` + architecture + code, then creates `docs/plan.md`.
+4. No code changes allowed in this phase.
+
+### Phase 2: Review & Revision Loop
+Architect reviews `plan.md` against `task.md`.
+
+Review criteria (must all pass):
+- Fits existing architecture
+- Correct modules selected
+- Scope is minimal and bounded
+- No unrelated work
+- Low risk of breaking existing features
+- Does not increase future maintenance cost
+
+Outcomes:
+- APPROVED → proceed to Phase 3
+- NEEDS REVISION:
+  - Architect writes/overwrites `docs/fix.md` with precise failure reasons
+  - Developer Agent reads `task.md` + latest `fix.md` and overwrites `plan.md`
+  - Return to Architect for re-review
+
+3-Strikes Reset Rule:
+If still failing at Round 4 or Round 5 → stop. Architect rewrites `task.md` from scratch and restart cycle. Current task is considered too ambiguous.
+
+### Phase 3: Implementation
+Developer Agent executes the approved `plan.md` exactly.
+- Changes must stay strictly within task bounds
+- No extra features, refactors, or “improvements” outside the plan
+
+### Phase 4: Completion
+1. Human runs tests and handles Git.
+2. If design changed → update `docs/ARCHITECTURE.md`.
+3. Append summary to `docs/LOG.md`.
+4. Delete temporary files: `task.md`, `plan.md`, `fix.md`.
+
+## HARD RULES
+
+Rule 1 — Architecture Protection  
+Before any addition ask: “Does this belong in the current architecture?”  
+Prefer existing mechanisms over new code.
+
+Rule 2 — Small Changes Only  
+Small task + small plan + small code change.  
+Large rewrites are forbidden without explicit new task.
+
+Rule 3 — No Scope Expansion  
+Task boundaries are absolute.  
+Unrelated work requires a new task.
+
+Rule 4 — Context Hygiene  
+Keep every temporary file short and focused.  
+No conversation history dumping into files.  
+Clear temporary files at end of every task.
+
+Rule 5 — Developer Agent Constraints  
+- Never touch Git
+- Never invent architecture decisions
+- Never expand beyond approved plan
+- Always prefer reading existing code and documents before proposing changes
