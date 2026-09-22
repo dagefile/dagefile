@@ -20,7 +20,7 @@ Define a controlled, zero-cost collaboration workflow between:
 * Runs tests and reviews final results.
 * Owns the project direction.
 
-### 2. Project Architect / Manager (ChatGPT)
+### 2. Project Architect / Manager (ChatGPT/Gemini/Grok/...)
 
 * Understands system architecture.
 * Creates tasks and reviews implementation plans.
